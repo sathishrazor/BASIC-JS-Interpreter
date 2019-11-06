@@ -1,0 +1,19 @@
+export const LANG_KEYWORDS = [
+  "VAR",
+  "AND",
+  "OR",
+  "NOT",
+  "IF",
+  "ELIF",
+  "ELSE",
+  "FOR",
+  "TO",
+  "STEP",
+  "WHILE",
+  "FUN",
+  "THEN",
+  "END",
+  "RETURN",
+  "CONTINUE",
+  "BREAK"
+];
