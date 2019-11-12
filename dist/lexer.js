@@ -162,7 +162,7 @@ define(["require", "exports", "./core/position", "./error/illegal_char_error", "
             var id_str = "";
             var pos_start = self.pos.copy();
             while (self.current_char != "" &&
-                (LETTERS_DIGITS + "_").indexOf(self.current_char)) {
+                ((LETTERS_DIGITS + "_").indexOf(self.current_char) > -1)) {
                 id_str += self.current_char;
                 self.advance();
             }

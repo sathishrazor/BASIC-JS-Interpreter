@@ -3,21 +3,20 @@ import { BNumber } from "./others/number";
 import { BString } from "./others/string";
 import { List } from "./others/list";
 import { RTError } from "./error/RT_error";
-import {Function} from  "./function/function";
+import { Function } from "./function/function";
 export class Interpreter {
 
-  visit(node: any, context: any,_this?:any) {
-    if(!_this)
-    {
+  visit(node: any, context: any, _this?: any) {
+    if (!_this) {
       _this = this;
     }
-    var method_name:string =  'visit_{type(node).__name__}' 
+    var method_name: string = `visit_${node.constructor.name}`
     var method: any = _this.getmethod(_this, method_name);
-    return method(node, context,_this)
+    return method(node, context, _this)
   }
 
   getmethod(ctx: any, name: string) {
-   
+
     return ctx[name];
   }
 
@@ -41,9 +40,8 @@ export class Interpreter {
     )
   }
 
-  visit_ListNode(node: any, context: any,_this?:any) {
-    if(!_this)
-    {
+  visit_ListNode(node: any, context: any, _this?: any) {
+    if (!_this) {
       _this = this;
     }
     var res = new RTResult()
@@ -58,7 +56,7 @@ export class Interpreter {
     )
   }
 
-  visit_VarAccessNode(node:any, context:any) {
+  visit_VarAccessNode(node: any, context: any) {
     var res = new RTResult()
     var var_name = node.var_name_tok.value
     var value = context.symbol_table.get(var_name)
@@ -72,9 +70,8 @@ export class Interpreter {
     return res.success(value)
   }
 
-  visit_VarAssignNode(node: any, context: any,_this?:any) {
-    if(!_this)
-    {
+  visit_VarAssignNode(node: any, context: any, _this?: any) {
+    if (!_this) {
       _this = this;
     }
     var res = new RTResult()
@@ -84,9 +81,8 @@ export class Interpreter {
     context.symbol_table.set(var_name, value)
     return res.success(value)
   }
-  visit_BinOpNode(node: any, context: any,_this?:any) {
-    if(!_this)
-    {
+  visit_BinOpNode(node: any, context: any, _this?: any) {
+    if (!_this) {
       _this = this;
     }
     var res = new RTResult()
@@ -128,9 +124,8 @@ export class Interpreter {
   }
 
 
-  visit_UnaryOpNode(node: any, context: any,_this?:any) {
-    if(!_this)
-    {
+  visit_UnaryOpNode(node: any, context: any, _this?: any) {
+    if (!_this) {
       _this = this;
     }
     var res = new RTResult()
@@ -143,9 +138,8 @@ export class Interpreter {
     return res.success(number.set_pos(node.pos_start, node.pos_end))
   }
 
-  visit_CallNode(node: any, context: any,_this:any) {
-    if(!_this)
-    {
+  visit_CallNode(node: any, context: any, _this: any) {
+    if (!_this) {
       _this = this;
     }
     var res = new RTResult()
@@ -164,9 +158,8 @@ export class Interpreter {
     return res.success(return_value)
   }
 
-  visit_ReturnNode(node: any, context: any,_this:any) {
-    if(!_this)
-    {
+  visit_ReturnNode(node: any, context: any, _this: any) {
+    if (!_this) {
       _this = this;
     }
     var res = new RTResult();
@@ -181,7 +174,7 @@ export class Interpreter {
   }
 
   visit_ContinueNode(node: any, context: any) {
-   
+
     return new RTResult().success_continue()
   }
 
@@ -189,9 +182,8 @@ export class Interpreter {
     return new RTResult().success_break()
   }
 
-  visit_ForNode(node: any, context: any,_this:any) {
-    if(!_this)
-    {
+  visit_ForNode(node: any, context: any, _this: any) {
+    if (!_this) {
       _this = this;
     }
     var res = new RTResult()
@@ -241,67 +233,61 @@ export class Interpreter {
   }
 
 
-visit_WhileNode(node:any, context:any,_this:any)
-{
-  if(!_this)
-  {
-    _this = this;
+  visit_WhileNode(node: any, context: any, _this: any) {
+    if (!_this) {
+      _this = this;
+    }
+    var res = new RTResult()
+    var elements = [];
+    var self = _this;
+    while (true) {
+      var condition = res.register(self.visit(node.condition_node, context))
+      if (res.should_return()) return res
+
+      if (!condition.is_true())
+        break
+
+      var value = res.register(self.visit(node.body_node, context))
+      if (res.should_return() && res.loop_should_continue == false
+        && res.loop_should_break == false) return res
+
+      if (res.loop_should_continue)
+        continue
+
+      if (res.loop_should_break)
+        break
+
+      elements.push(value)
+    }
+
+    if (node.should_return_null) {
+      return res.success(BNumber.null);
+    } else {
+      res.success(new List(elements)
+        .set_context(context).set_pos(node.pos_start, node.pos_end));
+    }
+
+
   }
-var res = new  RTResult()
-var elements = [];
-var self = _this;
-while(true)
-{
-  var condition = res.register(self.visit(node.condition_node, context))
-  if (res.should_return()) return res
-  
-  if(!condition.is_true())
-  break
-
-  var value = res.register(self.visit(node.body_node, context))
-  if (res.should_return() && res.loop_should_continue == false 
-  && res.loop_should_break == false) return res
-  
-  if(res.loop_should_continue)
-  continue
-  
-  if (res.loop_should_break)
-  break
-  
-  elements.push(value)
-}
-
-if(node.should_return_null)
-{
-  return res.success(BNumber.null);
-}else{
-  res.success(new List(elements)
-  .set_context(context).set_pos(node.pos_start, node.pos_end));
-}
-
-
-}
 
 
 
-visit_FuncDefNode(node:any, context:any)
-{
- var res = new RTResult();
- var func_name = undefined;
-  if(node.var_name_tok)
-  {
-    func_name = node.var_name_tok
-  }else{
-    func_name = null;
+  visit_FuncDefNode(node: any, context: any) {
+    var res = new RTResult();
+    var func_name = undefined;
+    if (node.var_name_tok) {
+      func_name = node.var_name_tok
+    } else {
+      func_name = null;
+    }
+    var body_node = node.body_node
+    var arg_names = node.arg_name_toks.map((x: any) => x.value);
+    var func_value = new Function(func_name, body_node, arg_names, node.should_auto_return)
+      .set_context(context).set_pos(node.pos_start, node.pos_end)
+    if (node.var_name_tok)
+      context.symbol_table.set(func_name, func_value)
+    return res.success(func_value)
   }
-var body_node = node.body_node
-var arg_names = node.arg_name_toks.map((x: any)=>x.value);
-var func_value = new Function(func_name, body_node, arg_names, node.should_auto_return)
-.set_context(context).set_pos(node.pos_start, node.pos_end)
-if (node.var_name_tok)
-  context.symbol_table.set(func_name, func_value)
-return res.success(func_value)
-}
 
 }
 

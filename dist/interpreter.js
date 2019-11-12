@@ -4,10 +4,13 @@ define(["require", "exports", "./core/RTResult", "./others/number", "./others/st
     var Interpreter = /** @class */ (function () {
         function Interpreter() {
         }
-        Interpreter.prototype.visit = function (node, context) {
-            var method_name = 'visit_{type(node).__name__}';
-            var method = this.getmethod(this, method_name);
-            return method(node, context);
+        Interpreter.prototype.visit = function (node, context, _this) {
+            if (!_this) {
+                _this = this;
+            }
+            var method_name = "visit_" + node.constructor.name;
+            var method = _this.getmethod(_this, method_name);
+            return method(node, context, _this);
         };
         Interpreter.prototype.getmethod = function (ctx, name) {
             return ctx[name];
@@ -25,10 +28,13 @@ define(["require", "exports", "./core/RTResult", "./others/number", "./others/st
                 .set_context(context)
                 .set_pos(node.pos_start, node.pos_end));
         };
-        Interpreter.prototype.visit_ListNode = function (node, context) {
+        Interpreter.prototype.visit_ListNode = function (node, context, _this) {
+            if (!_this) {
+                _this = this;
+            }
             var res = new RTResult_1.RTResult();
             var elements = [];
-            var self = this;
+            var self = _this;
             node.element_nodes.forEach(function (c, i, a) {
                 elements.push(res.register(self.visit(c, context)));
                 if (res.should_return()) {
@@ -46,21 +52,27 @@ define(["require", "exports", "./core/RTResult", "./others/number", "./others/st
             value = value.copy().set_pos(node.pos_start, node.pos_end).set_context(context);
             return res.success(value);
         };
-        Interpreter.prototype.visit_VarAssignNode = function (node, context) {
+        Interpreter.prototype.visit_VarAssignNode = function (node, context, _this) {
+            if (!_this) {
+                _this = this;
+            }
             var res = new RTResult_1.RTResult();
             var var_name = node.var_name_tok.value;
-            var value = res.register(this.visit(node.value_node, context));
+            var value = res.register(_this.visit(node.value_node, context));
             if (res.should_return())
                 return res;
             context.symbol_table.set(var_name, value);
             return res.success(value);
         };
-        Interpreter.prototype.visit_BinOpNode = function (node, context) {
+        Interpreter.prototype.visit_BinOpNode = function (node, context, _this) {
+            if (!_this) {
+                _this = this;
+            }
             var res = new RTResult_1.RTResult();
-            var left = res.register(this.visit(node.left_node, context));
+            var left = res.register(_this.visit(node.left_node, context));
             if (res.should_return())
                 return res;
-            var right = res.register(this.visit(node.right_node, context));
+            var right = res.register(_this.visit(node.right_node, context));
             if (res.should_return())
                 return res;
             var result = undefined;
@@ -95,9 +107,12 @@ define(["require", "exports", "./core/RTResult", "./others/number", "./others/st
             else
                 return res.success(result.set_pos(node.pos_start, node.pos_end));
         };
-        Interpreter.prototype.visit_UnaryOpNode = function (node, context) {
+        Interpreter.prototype.visit_UnaryOpNode = function (node, context, _this) {
+            if (!_this) {
+                _this = this;
+            }
             var res = new RTResult_1.RTResult();
-            var number = res.register(this.visit(node.node, context));
+            var number = res.register(_this.visit(node.node, context));
             if (res.should_return()) {
                 return res;
             }
@@ -107,16 +122,19 @@ define(["require", "exports", "./core/RTResult", "./others/number", "./others/st
                 number = number.notted();
             return res.success(number.set_pos(node.pos_start, node.pos_end));
         };
-        Interpreter.prototype.visit_CallNode = function (node, context) {
+        Interpreter.prototype.visit_CallNode = function (node, context, _this) {
+            if (!_this) {
+                _this = this;
+            }
             var res = new RTResult_1.RTResult();
             var args = [];
-            var value_to_call = res.register(this.visit(node.node_to_call, context));
+            var value_to_call = res.register(_this.visit(node.node_to_call, context));
             if (res.should_return())
                 return res;
             value_to_call = value_to_call.copy().set_pos(node.pos_start, node.pos_end);
             for (var key in node.arg_nodes) {
                 var arg_node = node.arg_nodes[key];
-                args.push(res.register(this.visit(arg_node, context)));
+                args.push(res.register(_this.visit(arg_node, context)));
                 if (res.should_return())
                     return res;
             }
@@ -126,10 +144,13 @@ define(["require", "exports", "./core/RTResult", "./others/number", "./others/st
             return_value = return_value.copy().set_pos(node.pos_start, node.pos_end).set_context(context);
             return res.success(return_value);
         };
-        Interpreter.prototype.visit_ReturnNode = function (node, context) {
+        Interpreter.prototype.visit_ReturnNode = function (node, context, _this) {
+            if (!_this) {
+                _this = this;
+            }
             var res = new RTResult_1.RTResult();
             if (node.node_to_return) {
-                var value = res.register(this.visit(node.node_to_return, context));
+                var value = res.register(_this.visit(node.node_to_return, context));
                 if (res.should_return())
                     return res;
             }
@@ -144,10 +165,13 @@ define(["require", "exports", "./core/RTResult", "./others/number", "./others/st
         Interpreter.prototype.visit_BreakNode = function (node, context) {
             return new RTResult_1.RTResult().success_break();
         };
-        Interpreter.prototype.visit_ForNode = function (node, context) {
+        Interpreter.prototype.visit_ForNode = function (node, context, _this) {
+            if (!_this) {
+                _this = this;
+            }
             var res = new RTResult_1.RTResult();
             var elements = [];
-            var self = this;
+            var self = _this;
             var start_value = res.register(self.visit(node.start_value_node, context));
             if (res.should_return())
                 return res;
@@ -191,10 +215,13 @@ define(["require", "exports", "./core/RTResult", "./others/number", "./others/st
                 return res.success(new list_1.List(elements).set_context(context).set_pos(node.pos_start, node.pos_end));
             }
         };
-        Interpreter.prototype.visit_WhileNode = function (node, context) {
+        Interpreter.prototype.visit_WhileNode = function (node, context, _this) {
+            if (!_this) {
+                _this = this;
+            }
             var res = new RTResult_1.RTResult();
             var elements = [];
-            var self = this;
+            var self = _this;
             while (true) {
                 var condition = res.register(self.visit(node.condition_node, context));
                 if (res.should_return())
