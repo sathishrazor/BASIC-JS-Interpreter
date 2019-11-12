@@ -1,6 +1,6 @@
-import { Value } from "../Value";
+import { Value } from "../others/Value";
 import {Context} from  "../core/context"
-import { RTResult } from "../RTResult";
+import { RTResult } from "../core/RTResult";
 import { RTError } from "../error/RT_error";
 import { SymbolTable } from "../others/symbol_table";
 export class BaseFunction extends Value

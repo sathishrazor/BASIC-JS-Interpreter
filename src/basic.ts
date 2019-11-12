@@ -1,4 +1,4 @@
-import { BNumber } from "./number";
+import { BNumber } from "./others/number";
 import { BuiltInFunction } from "./function/builtin_function";
 import { Lexer } from "./lexer";
 import { Parser } from "./parser";
@@ -40,13 +40,10 @@ export class basic {
         var tokens:any = lexer.make_tokens()
         // Generate AST    
         console.log(tokens);
-
         var parser = new Parser(tokens);
-
         console.log(parser);
-
-        // var ast = parser.parse()
-
+         var ast = parser.parse()
+         console.log(ast);
         // if (ast.error) { return ast.error }
 
         // var interpreter = new Interpreter()

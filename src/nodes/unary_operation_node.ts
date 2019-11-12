@@ -1,5 +1,5 @@
-import {LPosition} from "../position"
-import { Token } from "../tokens";
+import {LPosition} from "../core/position"
+import { Token } from "../others/tokens";
 export class UnaryOpNode {
     op_tok: Token;
     node: any;

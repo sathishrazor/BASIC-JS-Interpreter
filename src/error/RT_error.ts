@@ -1,5 +1,5 @@
 import {CodeError} from "./code_error"
-import {LPosition} from "../position"
+import {LPosition} from "../core/position"
 
 export class RTError extends CodeError
 {
@@ -11,27 +11,35 @@ constructor(pos_start:LPosition|undefined, pos_end:LPosition|undefined, details:
     this.context  =context;
 };    
 
-as_string()
+as_string(_this?:any)
  {
-    var result  = this.generate_traceback();
-    result += `{this.error_name}:
-     {this.details}\n\n' + {this.pos_start.ftxt}, {this.pos_start}, {this.pos_end}`;
+    if(!_this)
+    {
+       _this = this;
+    }
+    var result  = _this.generate_traceback();
+    result += `{_this.error_name}:
+     {_this.details}\n\n' + {_this.pos_start.ftxt}, {_this.pos_start}, {_this.pos_end}`;
     return result;
  }
 
- generate_traceback()
+ generate_traceback(_this?:any)
  {
+    if(!_this)
+    {
+       _this = this;
+    }
     var result = ''
-    var ctx = this.context;
-    var pos = this.pos_start;
+    var ctx = _this.context;
+    var pos = _this.pos_start;
     while (ctx)
     {
-      result = `File {pos.fn}, line {str(pos.ln + 1)}, 
-      in {ctx.display_name}\n  {result}`;
+      result = `File {pos.fn}, line ${pos.ln + 1}, 
+      in ${ctx.display_name}\n  ${result}`;
       pos = ctx.parent_entry_pos
       ctx = ctx.parent  
     }
-    return `Traceback (most recent call last):\n'  {result}`;
+    return `Traceback (most recent call last):\n'  ${result}`;
  }
  
 }

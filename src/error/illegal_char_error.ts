@@ -1,5 +1,5 @@
 import {CodeError} from "./code_error"
-import {LPosition} from "../position"
+import {LPosition} from "../core/position"
 export class IllegalCharError extends CodeError
 {
     constructor(pos_start:LPosition,pos_end:LPosition,details:string)

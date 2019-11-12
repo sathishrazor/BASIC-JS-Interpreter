@@ -1,42 +1,35 @@
-import { LPosition } from "./position";
-
-export class Token
-{
+import { LPosition } from "../core/position";
+export class Token {
     type: any;
-    value: any;    
+    value: any;
     pos_start: LPosition | undefined;
     pos_end: LPosition | undefined;
-    constructor(type:string, value:any, pos_start?:LPosition, pos_end?:LPosition)
-    {
+    constructor(type: string, value: any, pos_start?: LPosition, pos_end?: LPosition) {
         this.type = type;
         this.value = value;
-        if(pos_start)
-        {
+        if (pos_start) {
             this.pos_start = pos_start.copy()
             this.pos_end = pos_start.copy()
             this.pos_end.advance()
         }
-
-        if(pos_end)
-        {
+        if (pos_end) {
             this.pos_end = pos_end.copy();
         }
     }
 
-    matches(type:string, value:any)
-    {
-      return  this.type == type && this.value == value;
+    matches(type: string, value: any,_this?:any) {
+        if(!_this)
+        {
+            _this = this;
+        }
+        return _this.type == type && _this.value == value;
     }
 
-    toString()
-    {
-
-        if(this.value)
-        {
-            return `{this.type}:{this.value}`;
-
-        }    
-           return `{this.type}`;
+    toString() {
+        if (this.value) {
+            return `${this.type}:${this.value}`;
+        }
+        return `${this.type}`;
     }
 }
 

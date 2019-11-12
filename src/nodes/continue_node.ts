@@ -1,4 +1,4 @@
-import {LPosition} from "../position"
+import {LPosition} from "../core/position"
 export class ContinueNode
 {
     pos_start: LPosition;
