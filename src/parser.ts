@@ -29,9 +29,8 @@ export class Parser {
     this.advance(this);
   }
 
-  advance(_this?:any) {
-    if(!_this)
-    {
+  advance(_this?: any) {
+    if (!_this) {
       _this = this;
     }
     _this.tok_idx += 1;
@@ -39,9 +38,8 @@ export class Parser {
     return _this.current_tok;
   }
 
-  reverse(amount: number = 1,_this?:any) {
-    if(!_this)
-    {
+  reverse(amount: number = 1, _this?: any) {
+    if (!_this) {
       _this = this;
     }
     _this.tok_idx -= amount;
@@ -49,9 +47,8 @@ export class Parser {
     return _this.current_tok;
   }
 
-  update_current_tok(_this?:any) {
-    if(!_this)
-    {
+  update_current_tok(_this?: any) {
+    if (!_this) {
       _this = this;
     }
     if (_this.tok_idx >= 0 && _this.tok_idx < _this.tokens.length) {
@@ -59,9 +56,8 @@ export class Parser {
     }
   }
 
-  parse(_this?:any) {
-    if(!_this)
-    {
+  parse(_this?: any) {
+    if (!_this) {
       _this = this;
     }
     var res: any = _this.statements(this);
@@ -77,9 +73,8 @@ export class Parser {
     return res;
   }
 
-  statements(_this?:any) {
-    if(!_this)
-    {
+  statements(_this?: any) {
+    if (!_this) {
       _this = this;
     }
     var res = new ParseResult();
@@ -123,9 +118,8 @@ export class Parser {
     ))
   }
 
-  statement(_this?:any) {
-    if(!_this)
-    {
+  statement(_this?: any) {
+    if (!_this) {
       _this = this;
     }
     var res = new ParseResult();
@@ -138,7 +132,7 @@ export class Parser {
         _this.reverse(res.to_reverse_count);
       }
       return res.success(
-        new ReturnNode(expr, pos_start, _this.current_tok.pos_start.copy()),this
+        new ReturnNode(expr, pos_start, _this.current_tok.pos_start.copy()), this
       );
     }
 
@@ -172,9 +166,8 @@ export class Parser {
     return res.success(expr);
   }
 
-  expr(_this?:any) {
-    if(!_this)
-    {
+  expr(_this?: any) {
+    if (!_this) {
       _this = this;
     }
     var res = new ParseResult();
@@ -213,7 +206,7 @@ export class Parser {
     }
 
     var node = res.register(
-      _this.bin_op(_this.comp_expr, [[TT_KEYWORD, "AND"], [TT_KEYWORD, "OR"]],this)
+      _this.bin_op(_this.comp_expr, [[TT_KEYWORD, "AND"], [TT_KEYWORD, "OR"]], this)
     );
 
     if (res.error) {
@@ -234,9 +227,8 @@ export class Parser {
   }
 
 
-  comp_expr(_this?:any) {
-    if(!_this)
-    {
+  comp_expr(_this?: any) {
+    if (!_this) {
       _this = this;
     }
     var res = new ParseResult()
@@ -244,12 +236,12 @@ export class Parser {
       var op_tok = _this.current_tok;
       res.register_advancement()
       _this.advance()
-      var node = res.register(_this.comp_expr(this))
+      var node = res.register(_this.comp_expr(this), this)
       if (res.error) { return res; }
       return res.success(new UnaryOpNode(op_tok, node))
     }
 
-    node = res.register(_this.bin_op(_this.arith_expr, [TT_EE, TT_NE, TT_LT, TT_GT, TT_LTE, TT_GTE]))
+    node = res.register(_this.bin_op(_this.arith_expr, [TT_EE, TT_NE, TT_LT, TT_GT, TT_LTE, TT_GTE]), this)
 
     if (res.error) {
       return res.failure(new InvalidSyntaxError(
@@ -264,26 +256,23 @@ export class Parser {
 
 
 
-  arith_expr(_this?:any) {
-    if(!_this)
-    {
+  arith_expr(_this?: any) {
+    if (!_this) {
       _this = this;
     }
     return _this.bin_op(_this.term, [TT_PLUS, TT_MINUS])
   }
 
-  term(_this?:any) {
-    if(!_this)
-    {
+  term(_this?: any) {
+    if (!_this) {
       _this = this;
     }
     return _this.bin_op(_this.factor, [TT_MUL, TT_DIV])
   }
 
 
-  factor(_this?:any) {
-    if(!_this)
-    {
+  factor(_this?: any) {
+    if (!_this) {
       _this = this;
     }
     var res = new ParseResult();
@@ -299,21 +288,19 @@ export class Parser {
   }
 
 
-  power(_this?:any) {
-    if(!_this)
-    {
+  power(_this?: any) {
+    if (!_this) {
       _this = this;
     }
     return _this.bin_op(_this.call, [TT_POW], _this.factor)
   }
 
-  call(_this?:any) {
-    if(!_this)
-    {
+  call(_this?: any) {
+    if (!_this) {
       _this = this;
     }
     var res = new ParseResult()
-    var atom = res.register(_this.atom());
+    var atom = res.register(_this.atom(), this);
     if (res.error) { return res; }
 
     if (_this.current_tok.type == TT_LPAREN) {
@@ -325,7 +312,7 @@ export class Parser {
         res.register_advancement()
         _this.advance()
       } else {
-        arg_nodes.push(res.register(_this.expr()))
+        arg_nodes.push(res.register(_this.expr(this), this))
         if (res.error) {
           return res.failure(new InvalidSyntaxError(
             _this.current_tok.pos_start, _this.current_tok.pos_end,
@@ -335,7 +322,7 @@ export class Parser {
         while (_this.current_tok.type == TT_COMMA) {
           res.register_advancement()
           _this.advance();
-          arg_nodes.push(res.register(_this.expr()))
+          arg_nodes.push(res.register(_this.expr(this), this))
           if (res.error) return res;
         }
         if (_this.current_tok.type != TT_RPAREN) {
@@ -352,9 +339,8 @@ export class Parser {
     return res.success(atom)
   }
 
-  atom(_this?:any) {
-    if(!_this)
-    {
+  atom(_this?: any) {
+    if (!_this) {
       _this = this;
     }
     var res = new ParseResult()
@@ -378,7 +364,7 @@ export class Parser {
     else if (tok.type == TT_LPAREN) {
       res.register_advancement()
       _this.advance()
-      var expr = res.register(_this.expr())
+      var expr = res.register(_this.expr(this), this)
       if (res.error) { return res; }
       if (_this.current_tok.type == TT_RPAREN) {
         res.register_advancement()
@@ -393,27 +379,27 @@ export class Parser {
       }
     }
     else if (tok.type == TT_LSQUARE) {
-      var list_expr = res.register(_this.list_expr())
+      var list_expr = res.register(_this.list_expr(this), this)
       if (res.error) { return res; }
       return res.success(list_expr)
     }
     else if (tok.matches(TT_KEYWORD, 'IF')) {
-      var if_expr = res.register(_this.if_expr())
+      var if_expr = res.register(_this.if_expr(this), this)
       if (res.error) { return res; }
       return res.success(if_expr)
     }
     else if (tok.matches(TT_KEYWORD, 'FOR')) {
-      var for_expr = res.register(_this.for_expr())
+      var for_expr = res.register(_this.for_expr(this), this)
       if (res.error) { return res; }
       return res.success(for_expr);
     }
     else if (tok.matches(TT_KEYWORD, 'WHILE')) {
-      var while_expr = res.register(_this.while_expr())
+      var while_expr = res.register(_this.while_expr(this), this)
       if (res.error) { return res; }
       return res.success(while_expr)
     }
     else if (tok.matches(TT_KEYWORD, 'FUN')) {
-      var func_def = res.register(_this.func_def())
+      var func_def = res.register(_this.func_def(this), this)
       if (res.error) { return res; }
       return res.success(func_def)
     }
@@ -424,9 +410,8 @@ export class Parser {
 
   }
 
-  list_expr(_this?:any) {
-    if(!_this)
-    {
+  list_expr(_this?: any) {
+    if (!_this) {
       _this = this;
     }
     var res = new ParseResult();
@@ -446,7 +431,7 @@ export class Parser {
       _this.advance()
     }
     else {
-      element_nodes.push(res.register(_this.expr()))
+      element_nodes.push(res.register(_this.expr(this), this))
       if (res.error) {
         return res.failure(new InvalidSyntaxError(
           _this.current_tok.pos_start, _this.current_tok.pos_end,
@@ -457,7 +442,7 @@ export class Parser {
         res.register_advancement()
         _this.advance()
 
-        element_nodes.push(res.register(_this.expr()))
+        element_nodes.push(res.register(_this.expr(this), this))
         if (res.error) { return res; }
       }
       if (_this.current_tok.type != TT_RSQUARE) {
@@ -479,28 +464,25 @@ export class Parser {
 
 
 
-  if_expr(_this?:any) {
-    if(!_this)
-    {
+  if_expr(_this?: any) {
+    if (!_this) {
       _this = this;
     }
     var res = new ParseResult()
-    var all_cases = res.register(_this.if_expr_cases('IF'))
+    var all_cases = res.register(_this.if_expr_cases('IF'), this)
     if (res.error) { return res; }
     var cases = all_cases, else_case = all_cases
     return res.success(new IfNode(cases, else_case))
   }
-  if_expr_b(_this?:any) {
-    if(!_this)
-    {
+  if_expr_b(_this?: any) {
+    if (!_this) {
       _this = this;
     }
     return _this.if_expr_cases('ELIF')
   }
 
-  if_expr_c(_this?:any) {
-    if(!_this)
-    {
+  if_expr_c(_this?: any) {
+    if (!_this) {
       _this = this;
     }
     var res = new ParseResult();
@@ -512,7 +494,7 @@ export class Parser {
       if (_this.current_tok.type == TT_NEWLINE) {
         res.register_advancement();
         _this.advance();
-        var statements = res.register(_this.statements())
+        var statements = res.register(_this.statements(this), this)
         if (res.error) { return res; }
         else_case = [statements, true]
         if (_this.current_tok.matches(TT_KEYWORD, 'END')) {
@@ -528,7 +510,7 @@ export class Parser {
         }
       }
       else {
-        var expr = res.register(_this.statement())
+        var expr = res.register(_this.statement(this), this)
         if (res.error) { return res; }
         else_case = [expr, false]
       }
@@ -537,30 +519,28 @@ export class Parser {
   }
 
 
-  if_expr_b_or_c(_this?:any,) {
-    if(!_this)
-    {
+  if_expr_b_or_c(_this?: any, ) {
+    if (!_this) {
       _this = this;
     }
     var res = new ParseResult();
     var cases = []; var else_case = null;
     if (_this.current_tok.matches(TT_KEYWORD, 'ELIF')) {
-      var all_cases = res.register(_this.if_expr_b())
+      var all_cases = res.register(_this.if_expr_b(this), this)
       if (res.error) { return res; }
       cases = all_cases;
       else_case = all_cases;
     }
     else {
-      else_case = res.register(_this.if_expr_c())
+      else_case = res.register(_this.if_expr_c(this), this)
       if (res.error) { return res; }
     }
 
     return res.success([cases, else_case])
   }
 
-  if_expr_cases(case_keyword: any,_this?:any) {
-    if(!_this)
-    {
+  if_expr_cases(case_keyword: any, _this?: any) {
+    if (!_this) {
       _this = this;
     }
     var res = new ParseResult()
@@ -576,7 +556,7 @@ export class Parser {
     res.register_advancement()
     _this.advance()
 
-    var condition = res.register(_this.expr())
+    var condition = res.register(_this.expr(this), this)
     if (res.error) { return res; }
 
     if (!_this.current_tok.matches(TT_KEYWORD, 'THEN')) {
@@ -591,7 +571,7 @@ export class Parser {
     if (_this.current_tok.type == TT_NEWLINE) {
       res.register_advancement()
       _this.advance()
-      var statements = res.register(_this.statements())
+      var statements = res.register(_this.statements(this), this)
       if (res.error) { return res; }
       cases.push([condition, statements, true])
       if (_this.current_tok.matches(TT_KEYWORD, 'END')) {
@@ -599,7 +579,7 @@ export class Parser {
         _this.advance()
       }
       else {
-        all_cases = res.register(_this.if_expr_b_or_c())
+        all_cases = res.register(_this.if_expr_b_or_c(this), this)
         if (res.error) { return res }
         new_cases = all_cases;
         else_case = all_cases;
@@ -607,10 +587,10 @@ export class Parser {
       }
     }
     else {
-      var expr = res.register(_this.statement())
+      var expr = res.register(_this.statement(this), this)
       if (res.error) { return res }
       cases.push([condition, expr, false])
-      var all_cases: any[] = res.register(_this.if_expr_b_or_c())
+      var all_cases: any[] = res.register(_this.if_expr_b_or_c(this), this)
       if (res.error) { return res; }
       var new_cases = all_cases;
       else_case = all_cases
@@ -619,9 +599,8 @@ export class Parser {
     return res.success([cases, else_case])
   }
 
-  for_expr(_this?:any) {
-    if(!_this)
-    {
+  for_expr(_this?: any) {
+    if (!_this) {
       _this = this;
     }
     var res = new ParseResult()
@@ -654,7 +633,7 @@ export class Parser {
     }
     res.register_advancement()
     _this.advance()
-    var start_value = res.register(_this.expr())
+    var start_value = res.register(_this.expr(this), this)
     if (res.error) { return res }
     if (!_this.current_tok.matches(TT_KEYWORD, 'TO')) {
       return res.failure(new InvalidSyntaxError(
@@ -664,14 +643,14 @@ export class Parser {
     }
     res.register_advancement()
     _this.advance()
-    var end_value = res.register(_this.expr())
+    var end_value = res.register(_this.expr(this), this)
     if (res.error) { return res; }
     if (_this.current_tok.matches(TT_KEYWORD, 'STEP')) {
       res.register_advancement()
       _this.advance()
 
     }
-    var step_value = res.register(_this.expr())
+    var step_value = res.register(_this.expr(this), this)
     if (res.error) { return res }
     else {
       step_value = null;
@@ -700,14 +679,13 @@ export class Parser {
       _this.advance()
       return res.success(new ForNode(var_name, start_value, end_value, step_value, body, true))
     }
-    body = res.register(_this.statement())
+    body = res.register(_this.statement(this), this)
     if (res.error) { return res; }
     return res.success(new ForNode(var_name, start_value, end_value, step_value, body, false))
   }
 
-  while_expr(_this?:any) {
-    if(!_this)
-    {
+  while_expr(_this?: any) {
+    if (!_this) {
       _this = this;
     }
     var res = new ParseResult()
@@ -722,7 +700,7 @@ export class Parser {
     res.register_advancement()
     _this.advance()
 
-    var condition = res.register(_this.expr())
+    var condition = res.register(_this.expr(this), this)
     if (res.error) { return res }
 
     if (!_this.current_tok.matches(TT_KEYWORD, 'THEN')) {
@@ -736,7 +714,7 @@ export class Parser {
     if (_this.current_tok.type == TT_NEWLINE) {
       res.register_advancement()
       _this.advance()
-      var body = res.register(_this.statements())
+      var body = res.register(_this.statements(this), this)
       if (res.error) { return res; }
       if (!_this.current_tok.matches(TT_KEYWORD, 'END')) {
         return res.failure(new InvalidSyntaxError(
@@ -749,15 +727,14 @@ export class Parser {
       return res.success(new WhileNode(condition, body, true))
     }
 
-    body = res.register(_this.statement())
+    body = res.register(_this.statement(this), this)
     if (res.error) { return res }
 
     return res.success(new WhileNode(condition, body, false))
   }
 
-  func_def(_this?:any) {
-    if(!_this)
-    {
+  func_def(_this?: any) {
+    if (!_this) {
       _this = this;
     }
     var res = new ParseResult()
@@ -833,7 +810,7 @@ export class Parser {
     if (_this.current_tok.type == TT_ARROW) {
       res.register_advancement()
       _this.advance()
-      var body = res.register(_this.expr())
+      var body = res.register(_this.expr(this), this)
       if (res.error) { return res }
       return res.success(new FuncDefNode(
         var_name_tok,
@@ -853,7 +830,7 @@ export class Parser {
     res.register_advancement()
     _this.advance()
 
-    body = res.register(_this.statements())
+    body = res.register(_this.statements(this), this)
     if (res.error) { return res }
     if (_this.current_tok.matches(TT_KEYWORD, 'END')) {
       throw res.failure(new InvalidSyntaxError(
@@ -871,23 +848,22 @@ export class Parser {
     ))
   }
 
-  bin_op(func_a: any, ops: any, func_b: any = null,_this?:any) {
-    if(!_this)
-    {
+  bin_op(func_a: any, ops: any, func_b: any = null, _this?: any) {
+    if (!_this) {
       _this = this;
     }
     if (func_b == null) {
       func_b = func_a
     }
     var res = new ParseResult()
-    var left = res.register(func_a())
+    var left = res.register(func_a(this), this)
     if (res.error) { return res; }
     while (ops.indexOf(_this.current_tok.type) > -1
       || [_this.current_tok.type, _this.current_tok.value].indexOf(ops) > -1) {
       var op_tok = _this.current_tok
       res.register_advancement()
       _this.advance()
-      var right = res.register(func_b())
+      var right = res.register(func_b(this), this)
       if (res.error) { return res; }
       left = new BinOpNode(left, op_tok, right)
     }

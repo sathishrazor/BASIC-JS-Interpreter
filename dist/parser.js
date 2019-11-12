@@ -156,13 +156,13 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
                 var op_tok = _this.current_tok;
                 res.register_advancement();
                 _this.advance();
-                var node = res.register(_this.comp_expr(this));
+                var node = res.register(_this.comp_expr(this), this);
                 if (res.error) {
                     return res;
                 }
                 return res.success(new unary_operation_node_1.UnaryOpNode(op_tok, node));
             }
-            node = res.register(_this.bin_op(_this.arith_expr, [TT_EE, TT_NE, TT_LT, TT_GT, TT_LTE, TT_GTE]));
+            node = res.register(_this.bin_op(_this.arith_expr, [TT_EE, TT_NE, TT_LT, TT_GT, TT_LTE, TT_GTE]), this);
             if (res.error) {
                 return res.failure(new invalid_syntax_error_1.InvalidSyntaxError(_this.current_tok.pos_start, _this.current_tok.pos_end, "Expected int, float, identifier, '+', '-', '(', '[', 'IF', 'FOR', 'WHILE', 'FUN' or 'NOT'"));
             }
@@ -208,7 +208,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
                 _this = this;
             }
             var res = new parse_result_1.ParseResult();
-            var atom = res.register(_this.atom());
+            var atom = res.register(_this.atom(), this);
             if (res.error) {
                 return res;
             }
@@ -221,14 +221,14 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
                     _this.advance();
                 }
                 else {
-                    arg_nodes.push(res.register(_this.expr()));
+                    arg_nodes.push(res.register(_this.expr(this), this));
                     if (res.error) {
                         return res.failure(new invalid_syntax_error_1.InvalidSyntaxError(_this.current_tok.pos_start, _this.current_tok.pos_end, "Expected ')', 'VAR', 'IF', 'FOR', 'WHILE', 'FUN', int, float, identifier, '+', '-', '(', '[' or 'NOT'"));
                     }
                     while (_this.current_tok.type == TT_COMMA) {
                         res.register_advancement();
                         _this.advance();
-                        arg_nodes.push(res.register(_this.expr()));
+                        arg_nodes.push(res.register(_this.expr(this), this));
                         if (res.error)
                             return res;
                     }
@@ -266,7 +266,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
             else if (tok.type == TT_LPAREN) {
                 res.register_advancement();
                 _this.advance();
-                var expr = res.register(_this.expr());
+                var expr = res.register(_this.expr(this), this);
                 if (res.error) {
                     return res;
                 }
@@ -280,35 +280,35 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
                 }
             }
             else if (tok.type == TT_LSQUARE) {
-                var list_expr = res.register(_this.list_expr());
+                var list_expr = res.register(_this.list_expr(this), this);
                 if (res.error) {
                     return res;
                 }
                 return res.success(list_expr);
             }
             else if (tok.matches(TT_KEYWORD, 'IF')) {
-                var if_expr = res.register(_this.if_expr());
+                var if_expr = res.register(_this.if_expr(this), this);
                 if (res.error) {
                     return res;
                 }
                 return res.success(if_expr);
             }
             else if (tok.matches(TT_KEYWORD, 'FOR')) {
-                var for_expr = res.register(_this.for_expr());
+                var for_expr = res.register(_this.for_expr(this), this);
                 if (res.error) {
                     return res;
                 }
                 return res.success(for_expr);
             }
             else if (tok.matches(TT_KEYWORD, 'WHILE')) {
-                var while_expr = res.register(_this.while_expr());
+                var while_expr = res.register(_this.while_expr(this), this);
                 if (res.error) {
                     return res;
                 }
                 return res.success(while_expr);
             }
             else if (tok.matches(TT_KEYWORD, 'FUN')) {
-                var func_def = res.register(_this.func_def());
+                var func_def = res.register(_this.func_def(this), this);
                 if (res.error) {
                     return res;
                 }
@@ -333,14 +333,14 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
                 _this.advance();
             }
             else {
-                element_nodes.push(res.register(_this.expr()));
+                element_nodes.push(res.register(_this.expr(this), this));
                 if (res.error) {
                     return res.failure(new invalid_syntax_error_1.InvalidSyntaxError(_this.current_tok.pos_start, _this.current_tok.pos_end, "Expected ']', 'VAR', 'IF', 'FOR', 'WHILE', 'FUN', int, float, identifier, '+', '-', '(', '[' or 'NOT'"));
                 }
                 while (_this.current_tok.type == TT_COMMA) {
                     res.register_advancement();
                     _this.advance();
-                    element_nodes.push(res.register(_this.expr()));
+                    element_nodes.push(res.register(_this.expr(this), this));
                     if (res.error) {
                         return res;
                     }
@@ -358,7 +358,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
                 _this = this;
             }
             var res = new parse_result_1.ParseResult();
-            var all_cases = res.register(_this.if_expr_cases('IF'));
+            var all_cases = res.register(_this.if_expr_cases('IF'), this);
             if (res.error) {
                 return res;
             }
@@ -383,7 +383,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
                 if (_this.current_tok.type == TT_NEWLINE) {
                     res.register_advancement();
                     _this.advance();
-                    var statements = res.register(_this.statements());
+                    var statements = res.register(_this.statements(this), this);
                     if (res.error) {
                         return res;
                     }
@@ -397,7 +397,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
                     }
                 }
                 else {
-                    var expr = res.register(_this.statement());
+                    var expr = res.register(_this.statement(this), this);
                     if (res.error) {
                         return res;
                     }
@@ -414,7 +414,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
             var cases = [];
             var else_case = null;
             if (_this.current_tok.matches(TT_KEYWORD, 'ELIF')) {
-                var all_cases = res.register(_this.if_expr_b());
+                var all_cases = res.register(_this.if_expr_b(this), this);
                 if (res.error) {
                     return res;
                 }
@@ -422,7 +422,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
                 else_case = all_cases;
             }
             else {
-                else_case = res.register(_this.if_expr_c());
+                else_case = res.register(_this.if_expr_c(this), this);
                 if (res.error) {
                     return res;
                 }
@@ -441,7 +441,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
             }
             res.register_advancement();
             _this.advance();
-            var condition = res.register(_this.expr());
+            var condition = res.register(_this.expr(this), this);
             if (res.error) {
                 return res;
             }
@@ -453,7 +453,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
             if (_this.current_tok.type == TT_NEWLINE) {
                 res.register_advancement();
                 _this.advance();
-                var statements = res.register(_this.statements());
+                var statements = res.register(_this.statements(this), this);
                 if (res.error) {
                     return res;
                 }
@@ -463,7 +463,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
                     _this.advance();
                 }
                 else {
-                    all_cases = res.register(_this.if_expr_b_or_c());
+                    all_cases = res.register(_this.if_expr_b_or_c(this), this);
                     if (res.error) {
                         return res;
                     }
@@ -473,12 +473,12 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
                 }
             }
             else {
-                var expr = res.register(_this.statement());
+                var expr = res.register(_this.statement(this), this);
                 if (res.error) {
                     return res;
                 }
                 cases.push([condition, expr, false]);
-                var all_cases = res.register(_this.if_expr_b_or_c());
+                var all_cases = res.register(_this.if_expr_b_or_c(this), this);
                 if (res.error) {
                     return res;
                 }
@@ -509,7 +509,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
             }
             res.register_advancement();
             _this.advance();
-            var start_value = res.register(_this.expr());
+            var start_value = res.register(_this.expr(this), this);
             if (res.error) {
                 return res;
             }
@@ -518,7 +518,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
             }
             res.register_advancement();
             _this.advance();
-            var end_value = res.register(_this.expr());
+            var end_value = res.register(_this.expr(this), this);
             if (res.error) {
                 return res;
             }
@@ -526,7 +526,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
                 res.register_advancement();
                 _this.advance();
             }
-            var step_value = res.register(_this.expr());
+            var step_value = res.register(_this.expr(this), this);
             if (res.error) {
                 return res;
             }
@@ -553,7 +553,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
                 _this.advance();
                 return res.success(new for_node_1.ForNode(var_name, start_value, end_value, step_value, body, true));
             }
-            body = res.register(_this.statement());
+            body = res.register(_this.statement(this), this);
             if (res.error) {
                 return res;
             }
@@ -569,7 +569,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
             }
             res.register_advancement();
             _this.advance();
-            var condition = res.register(_this.expr());
+            var condition = res.register(_this.expr(this), this);
             if (res.error) {
                 return res;
             }
@@ -581,7 +581,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
             if (_this.current_tok.type == TT_NEWLINE) {
                 res.register_advancement();
                 _this.advance();
-                var body = res.register(_this.statements());
+                var body = res.register(_this.statements(this), this);
                 if (res.error) {
                     return res;
                 }
@@ -592,7 +592,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
                 _this.advance();
                 return res.success(new while_node_1.WhileNode(condition, body, true));
             }
-            body = res.register(_this.statement());
+            body = res.register(_this.statement(this), this);
             if (res.error) {
                 return res;
             }
@@ -653,7 +653,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
             if (_this.current_tok.type == TT_ARROW) {
                 res.register_advancement();
                 _this.advance();
-                var body = res.register(_this.expr());
+                var body = res.register(_this.expr(this), this);
                 if (res.error) {
                     return res;
                 }
@@ -664,7 +664,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
             }
             res.register_advancement();
             _this.advance();
-            body = res.register(_this.statements());
+            body = res.register(_this.statements(this), this);
             if (res.error) {
                 return res;
             }
@@ -684,7 +684,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
                 func_b = func_a;
             }
             var res = new parse_result_1.ParseResult();
-            var left = res.register(func_a());
+            var left = res.register(func_a(this), this);
             if (res.error) {
                 return res;
             }
@@ -693,7 +693,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
                 var op_tok = _this.current_tok;
                 res.register_advancement();
                 _this.advance();
-                var right = res.register(func_b());
+                var right = res.register(func_b(this), this);
                 if (res.error) {
                     return res;
                 }
