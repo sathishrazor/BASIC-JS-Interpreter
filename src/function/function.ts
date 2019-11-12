@@ -1,7 +1,7 @@
 import { BaseFunction } from "./base_function";
-import { RTResult } from "./RTResult";
-import { Interpreter } from "./interpreter";
-import { BNumber } from "./number";
+import { RTResult } from "../RTResult";
+import { Interpreter } from "../interpreter";
+import { BNumber } from "../number";
 
 export class Function extends BaseFunction
 {

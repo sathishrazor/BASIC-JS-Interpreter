@@ -1,4 +1,4 @@
-define(["require", "exports", "./number", "./builtin_function", "./lexer", "./parser", "./context", "./interpreter", "./symbol_table"], function (require, exports, number_1, builtin_function_1, lexer_1, parser_1, context_1, interpreter_1, symbol_table_1) {
+define(["require", "exports", "./number", "./builtin_function", "./lexer", "./parser", "./symbol_table"], function (require, exports, number_1, builtin_function_1, lexer_1, parser_1, symbol_table_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var basic = /** @class */ (function () {
@@ -33,15 +33,14 @@ define(["require", "exports", "./number", "./builtin_function", "./lexer", "./pa
             console.log(tokens);
             var parser = new parser_1.Parser(tokens);
             console.log(parser);
-            var ast = parser.parse();
-            if (ast.error) {
-                return ast.error;
-            }
-            var interpreter = new interpreter_1.Interpreter();
-            var context = new context_1.Context('<program>');
-            context.symbol_table = global_symbol_table;
-            var result = interpreter.visit(ast.node, context);
-            return result.value;
+            // var ast = parser.parse()
+            // if (ast.error) { return ast.error }
+            // var interpreter = new Interpreter()
+            // var context = new Context('<program>')
+            // context.symbol_table = global_symbol_table
+            // var result = interpreter.visit(ast.node, context)
+            // return result.value;
+            return parser;
         };
         return basic;
     }());

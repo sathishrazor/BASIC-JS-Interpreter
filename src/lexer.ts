@@ -1,6 +1,6 @@
 import {LPosition} from "./position"
 import {IllegalCharError} from "./error/illegal_char_error"
-import { LANG_KEYWORDS} from "./keywords"
+import { LANG_KEYWORDS} from "./others/keywords"
 import {ExpectedCharError} from "./error/expected_char_error"
 import { Token } from "./tokens";
 

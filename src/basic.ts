@@ -1,10 +1,10 @@
 import { BNumber } from "./number";
-import { BuiltInFunction } from "./builtin_function";
+import { BuiltInFunction } from "./function/builtin_function";
 import { Lexer } from "./lexer";
 import { Parser } from "./parser";
-import { Context } from "./context";
+import { Context } from "./core/context";
 import { Interpreter } from "./interpreter";
-import { SymbolTable } from "./symbol_table";
+import { SymbolTable } from "./others/symbol_table";
 
 export class basic {
     constructor()
@@ -40,14 +40,24 @@ export class basic {
         var tokens:any = lexer.make_tokens()
         // Generate AST    
         console.log(tokens);
-        var parser = new Parser(tokens)
+
+        var parser = new Parser(tokens);
+
         console.log(parser);
-        var ast = parser.parse()
-        if (ast.error) { return ast.error }
-        var interpreter = new Interpreter()
-        var context = new Context('<program>')
-        context.symbol_table = global_symbol_table
-        var result = interpreter.visit(ast.node, context)
-        return result.value;
+
+        // var ast = parser.parse()
+
+        // if (ast.error) { return ast.error }
+
+        // var interpreter = new Interpreter()
+
+        // var context = new Context('<program>')
+
+        // context.symbol_table = global_symbol_table
+
+        // var result = interpreter.visit(ast.node, context)
+        
+        // return result.value;
+        return parser;
      }
 }

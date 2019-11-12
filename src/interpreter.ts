@@ -3,7 +3,7 @@ import { BNumber } from "./number";
 import { BString } from "./string";
 import { List } from "./list";
 import { RTError } from "./error/RT_error";
-import {Function} from  "./function";
+import {Function} from  "./function/function";
 export class Interpreter {
   visit(node: any, context: any) {
     var method_name:string =  'visit_{type(node).__name__}' 

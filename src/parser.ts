@@ -16,8 +16,8 @@ import { WhileNode } from "./nodes/while_node";
 import { FuncDefNode } from "./nodes/function_definition_node";
 import { BinOpNode } from "./nodes/binary_operation_node";
 import { Token } from "./tokens";
-import "./token_value";
-import { ParseResult } from "./parse_result";
+import "./others/token_value";
+import { ParseResult } from "./core/parse_result";
 export class Parser {
   tokens: Token[];
   tok_idx: number;

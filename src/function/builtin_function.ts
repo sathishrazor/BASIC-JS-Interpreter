@@ -1,12 +1,12 @@
-import { RTResult } from "./RTResult";
+import { RTResult } from "../RTResult";
 import { BaseFunction } from "./base_function";
-import { Context } from "./context";
-import { BNumber } from "./number";
-import { RTError } from "./error/RT_error";
-import { List } from "./list";
-import { Lexer } from "./lexer";
-import { Parser } from "./parser";
-import { Interpreter } from "./interpreter";
+import { Context } from "../core/context";
+import { BNumber } from "../number";
+import { RTError } from "../error/RT_error";
+import { List } from "../list";
+import { Lexer } from "../lexer";
+import { Parser } from "../parser";
+import { Interpreter } from "../interpreter";
 
 export class BuiltInFunction extends BaseFunction {
    arg_names: string[] | undefined;
