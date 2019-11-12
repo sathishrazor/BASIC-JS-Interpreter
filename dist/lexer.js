@@ -1,4 +1,4 @@
-define(["require", "exports", "./position", "./error/illegal_char_error", "./keywords", "./error/expected_char_error", "./tokens"], function (require, exports, position_1, illegal_char_error_1, keywords_1, expected_char_error_1, tokens_1) {
+define(["require", "exports", "./core/position", "./error/illegal_char_error", "./others/keywords", "./error/expected_char_error", "./others/tokens"], function (require, exports, position_1, illegal_char_error_1, keywords_1, expected_char_error_1, tokens_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var Lexer = /** @class */ (function () {

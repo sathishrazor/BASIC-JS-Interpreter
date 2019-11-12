@@ -14,14 +14,17 @@ define(["require", "exports"], function (require, exports) {
                 this.pos_end = pos_end.copy();
             }
         }
-        Token.prototype.matches = function (type, value) {
-            return this.type == type && this.value == value;
+        Token.prototype.matches = function (type, value, _this) {
+            if (!_this) {
+                _this = this;
+            }
+            return _this.type == type && _this.value == value;
         };
         Token.prototype.toString = function () {
             if (this.value) {
-                return "{this.type}:{this.value}";
+                return this.type + ":" + this.value;
             }
-            return "{this.type}";
+            return "" + this.type;
         };
         return Token;
     }());

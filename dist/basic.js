@@ -1,4 +1,4 @@
-define(["require", "exports", "./number", "./builtin_function", "./lexer", "./parser", "./symbol_table"], function (require, exports, number_1, builtin_function_1, lexer_1, parser_1, symbol_table_1) {
+define(["require", "exports", "./others/number", "./function/builtin_function", "./lexer", "./parser", "./others/symbol_table"], function (require, exports, number_1, builtin_function_1, lexer_1, parser_1, symbol_table_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var basic = /** @class */ (function () {
@@ -33,7 +33,8 @@ define(["require", "exports", "./number", "./builtin_function", "./lexer", "./pa
             console.log(tokens);
             var parser = new parser_1.Parser(tokens);
             console.log(parser);
-            // var ast = parser.parse()
+            var ast = parser.parse();
+            console.log(ast);
             // if (ast.error) { return ast.error }
             // var interpreter = new Interpreter()
             // var context = new Context('<program>')

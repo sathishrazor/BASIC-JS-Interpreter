@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-define(["require", "exports", "./Value", "./context", "./RTResult", "./error/RT_error", "./symbol_table"], function (require, exports, Value_1, context_1, RTResult_1, RT_error_1, symbol_table_1) {
+define(["require", "exports", "../others/Value", "../core/context", "../core/RTResult", "../error/RT_error", "../others/symbol_table"], function (require, exports, Value_1, context_1, RTResult_1, RT_error_1, symbol_table_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var BaseFunction = /** @class */ (function (_super) {

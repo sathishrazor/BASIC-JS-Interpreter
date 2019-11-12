@@ -17,26 +17,32 @@ define(["require", "exports", "./code_error"], function (require, exports, code_
     var RTError = /** @class */ (function (_super) {
         __extends(RTError, _super);
         function RTError(pos_start, pos_end, details, context) {
-            var _this = _super.call(this, pos_start, pos_end, 'Runtime Error', details) || this;
-            _this.context = context;
-            return _this;
+            var _this_1 = _super.call(this, pos_start, pos_end, 'Runtime Error', details) || this;
+            _this_1.context = context;
+            return _this_1;
         }
         ;
-        RTError.prototype.as_string = function () {
-            var result = this.generate_traceback();
-            result += "{this.error_name}:\n     {this.details}\n\n' + {this.pos_start.ftxt}, {this.pos_start}, {this.pos_end}";
+        RTError.prototype.as_string = function (_this) {
+            if (!_this) {
+                _this = this;
+            }
+            var result = _this.generate_traceback();
+            result += "{_this.error_name}:\n     {_this.details}\n\n' + {_this.pos_start.ftxt}, {_this.pos_start}, {_this.pos_end}";
             return result;
         };
-        RTError.prototype.generate_traceback = function () {
+        RTError.prototype.generate_traceback = function (_this) {
+            if (!_this) {
+                _this = this;
+            }
             var result = '';
-            var ctx = this.context;
-            var pos = this.pos_start;
+            var ctx = _this.context;
+            var pos = _this.pos_start;
             while (ctx) {
-                result = "File {pos.fn}, line {str(pos.ln + 1)}, \n      in {ctx.display_name}\n  {result}";
+                result = "File {pos.fn}, line " + (pos.ln + 1) + ", \n      in " + ctx.display_name + "\n  " + result;
                 pos = ctx.parent_entry_pos;
                 ctx = ctx.parent;
             }
-            return "Traceback (most recent call last):\n'  {result}";
+            return "Traceback (most recent call last):\n'  " + result;
         };
         return RTError;
     }(code_error_1.CodeError));

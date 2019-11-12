@@ -34,7 +34,7 @@ define(["require", "exports", "./Value", "./number"], function (require, exports
                 return new BString(this.value * other.value).set_context(this.context);
             }
             else {
-                return this.illegal_operation(other);
+                throw this.illegal_operation(other);
             }
         };
         BString.prototype.is_true = function () {

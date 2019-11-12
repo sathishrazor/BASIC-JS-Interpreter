@@ -1,4 +1,4 @@
-import {LPosition} from "../position"
+import {LPosition} from "../core/position"
 export class CodeError
 {
     pos_start: LPosition|undefined;

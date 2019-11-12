@@ -1,10 +1,11 @@
-import { RTResult } from "./RTResult";
-import { BNumber } from "./number";
-import { BString } from "./string";
-import { List } from "./list";
+import { RTResult } from "./core/RTResult";
+import { BNumber } from "./others/number";
+import { BString } from "./others/string";
+import { List } from "./others/list";
 import { RTError } from "./error/RT_error";
 import {Function} from  "./function/function";
 export class Interpreter {
+  
   visit(node: any, context: any) {
     var method_name:string =  'visit_{type(node).__name__}' 
     var method: any = this.getmethod(this, method_name);

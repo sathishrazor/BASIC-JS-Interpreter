@@ -1,4 +1,4 @@
-define(["require", "exports", "./RTResult", "./number", "./string", "./list", "./error/RT_error", "./function"], function (require, exports, RTResult_1, number_1, string_1, list_1, RT_error_1, function_1) {
+define(["require", "exports", "./core/RTResult", "./others/number", "./others/string", "./others/list", "./error/RT_error", "./function/function"], function (require, exports, RTResult_1, number_1, string_1, list_1, RT_error_1, function_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var Interpreter = /** @class */ (function () {

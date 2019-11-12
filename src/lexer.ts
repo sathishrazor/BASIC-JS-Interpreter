@@ -1,8 +1,8 @@
-import {LPosition} from "./position"
+import {LPosition} from "./core/position"
 import {IllegalCharError} from "./error/illegal_char_error"
 import { LANG_KEYWORDS} from "./others/keywords"
 import {ExpectedCharError} from "./error/expected_char_error"
-import { Token } from "./tokens";
+import { Token } from "./others/tokens";
 
 export class Lexer {
   fn: any;

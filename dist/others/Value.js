@@ -1,4 +1,4 @@
-define(["require", "exports", "./error/RT_error", "./RTResult"], function (require, exports, RT_error_1, RTResult_1) {
+define(["require", "exports", "../error/RT_error", "../core/RTResult"], function (require, exports, RT_error_1, RTResult_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var Value = /** @class */ (function () {
