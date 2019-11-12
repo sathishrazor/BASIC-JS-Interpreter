@@ -46,15 +46,15 @@ export class basic {
          console.log(ast);
         // if (ast.error) { return ast.error }
 
-        // var interpreter = new Interpreter()
+        var interpreter = new Interpreter()
 
-        // var context = new Context('<program>')
+        var context = new Context('<program>')
 
-        // context.symbol_table = global_symbol_table
+        context.symbol_table = global_symbol_table
 
-        // var result = interpreter.visit(ast.node, context)
+        var result = interpreter.visit(ast.node, context)
         
-        // return result.value;
-        return parser;
+        console.log(result);
+        return result;
      }
 }

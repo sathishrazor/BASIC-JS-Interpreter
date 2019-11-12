@@ -5,14 +5,19 @@ import { List } from "./others/list";
 import { RTError } from "./error/RT_error";
 import {Function} from  "./function/function";
 export class Interpreter {
-  
-  visit(node: any, context: any) {
+
+  visit(node: any, context: any,_this?:any) {
+    if(!_this)
+    {
+      _this = this;
+    }
     var method_name:string =  'visit_{type(node).__name__}' 
-    var method: any = this.getmethod(this, method_name);
-    return method(node, context)
+    var method: any = _this.getmethod(_this, method_name);
+    return method(node, context,_this)
   }
 
   getmethod(ctx: any, name: string) {
+   
     return ctx[name];
   }
 
@@ -36,10 +41,14 @@ export class Interpreter {
     )
   }
 
-  visit_ListNode(node: any, context: any) {
+  visit_ListNode(node: any, context: any,_this?:any) {
+    if(!_this)
+    {
+      _this = this;
+    }
     var res = new RTResult()
     var elements: any[] = [];
-    var self = this;
+    var self = _this;
     node.element_nodes.forEach(function (c: any, i: number, a: any[]) {
       elements.push(res.register(self.visit(c, context)))
       if (res.should_return()) { return res }
@@ -63,19 +72,27 @@ export class Interpreter {
     return res.success(value)
   }
 
-  visit_VarAssignNode(node: any, context: any) {
+  visit_VarAssignNode(node: any, context: any,_this?:any) {
+    if(!_this)
+    {
+      _this = this;
+    }
     var res = new RTResult()
     var var_name = node.var_name_tok.value
-    var value = res.register(this.visit(node.value_node, context))
+    var value = res.register(_this.visit(node.value_node, context))
     if (res.should_return()) return res
     context.symbol_table.set(var_name, value)
     return res.success(value)
   }
-  visit_BinOpNode(node: any, context: any) {
+  visit_BinOpNode(node: any, context: any,_this?:any) {
+    if(!_this)
+    {
+      _this = this;
+    }
     var res = new RTResult()
-    var left = res.register(this.visit(node.left_node, context))
+    var left = res.register(_this.visit(node.left_node, context))
     if (res.should_return()) return res;
-    var right = res.register(this.visit(node.right_node, context))
+    var right = res.register(_this.visit(node.right_node, context))
     if (res.should_return()) return res
     var result: any = undefined;
     if (node.op_tok.type == TT_PLUS)
@@ -111,9 +128,13 @@ export class Interpreter {
   }
 
 
-  visit_UnaryOpNode(node: any, context: any) {
+  visit_UnaryOpNode(node: any, context: any,_this?:any) {
+    if(!_this)
+    {
+      _this = this;
+    }
     var res = new RTResult()
-    var number = res.register(this.visit(node.node, context))
+    var number = res.register(_this.visit(node.node, context))
     if (res.should_return()) { return res; }
     if (node.op_tok.type == TT_MINUS)
       number = number.multed_by(Number(-1))
@@ -122,16 +143,19 @@ export class Interpreter {
     return res.success(number.set_pos(node.pos_start, node.pos_end))
   }
 
-
-  visit_CallNode(node: any, context: any) {
+  visit_CallNode(node: any, context: any,_this:any) {
+    if(!_this)
+    {
+      _this = this;
+    }
     var res = new RTResult()
     var args = []
-    var value_to_call = res.register(this.visit(node.node_to_call, context))
+    var value_to_call = res.register(_this.visit(node.node_to_call, context))
     if (res.should_return()) return res;
     value_to_call = value_to_call.copy().set_pos(node.pos_start, node.pos_end)
     for (var key in node.arg_nodes) {
       var arg_node = node.arg_nodes[key];
-      args.push(res.register(this.visit(arg_node, context)))
+      args.push(res.register(_this.visit(arg_node, context)))
       if (res.should_return()) return res;
     }
     var return_value = res.register(value_to_call.execute(args))
@@ -140,11 +164,14 @@ export class Interpreter {
     return res.success(return_value)
   }
 
-
-  visit_ReturnNode(node: any, context: any) {
+  visit_ReturnNode(node: any, context: any,_this:any) {
+    if(!_this)
+    {
+      _this = this;
+    }
     var res = new RTResult();
     if (node.node_to_return) {
-      var value = res.register(this.visit(node.node_to_return, context))
+      var value = res.register(_this.visit(node.node_to_return, context))
       if (res.should_return()) return res
     }
     else {
@@ -154,6 +181,7 @@ export class Interpreter {
   }
 
   visit_ContinueNode(node: any, context: any) {
+   
     return new RTResult().success_continue()
   }
 
@@ -161,16 +189,18 @@ export class Interpreter {
     return new RTResult().success_break()
   }
 
-  visit_ForNode(node: any, context: any) {
+  visit_ForNode(node: any, context: any,_this:any) {
+    if(!_this)
+    {
+      _this = this;
+    }
     var res = new RTResult()
     var elements = []
-    var self = this;
+    var self = _this;
     var start_value = res.register(self.visit(node.start_value_node, context))
     if (res.should_return()) return res
-
     var end_value = res.register(self.visit(node.end_value_node, context))
     if (res.should_return()) return res
-
     if (node.step_value_node) {
       var step_value = res.register(self.visit(node.step_value_node, context))
       if (res.should_return()) return res;
@@ -211,11 +241,15 @@ export class Interpreter {
   }
 
 
-visit_WhileNode(node:any, context:any)
+visit_WhileNode(node:any, context:any,_this:any)
 {
+  if(!_this)
+  {
+    _this = this;
+  }
 var res = new  RTResult()
 var elements = [];
-var self = this;
+var self = _this;
 while(true)
 {
   var condition = res.register(self.visit(node.condition_node, context))
@@ -268,9 +302,6 @@ if (node.var_name_tok)
   context.symbol_table.set(func_name, func_value)
 return res.success(func_value)
 }
-
-
-
 
 }
 
