@@ -48,7 +48,7 @@ define(["require", "exports", "./core/RTResult", "./others/number", "./others/st
             var var_name = node.var_name_tok.value;
             var value = context.symbol_table.get(var_name);
             if (!value)
-                return res.failure(new RT_error_1.RTError(node.pos_start, node.pos_end, var_name + "' is not defined", context));
+                throw res.failure(new RT_error_1.RTError(node.pos_start, node.pos_end, var_name + "' is not defined", context));
             value = value.copy().set_pos(node.pos_start, node.pos_end).set_context(context);
             return res.success(value);
         };
@@ -151,8 +151,7 @@ define(["require", "exports", "./core/RTResult", "./others/number", "./others/st
             var res = new RTResult_1.RTResult();
             if (node.node_to_return) {
                 var value = res.register(_this.visit(node.node_to_return, context));
-                if (res.should_return())
-                    return res;
+                return res.success_return(value);
             }
             else {
                 value = number_1.BNumber.null;

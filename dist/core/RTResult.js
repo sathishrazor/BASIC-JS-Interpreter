@@ -39,6 +39,7 @@ define(["require", "exports"], function (require, exports) {
             }
             _this.reset();
             _this.func_return_value = value;
+            _this.value = value;
             return _this;
         };
         RTResult.prototype.success_continue = function (_this) {
@@ -66,12 +67,19 @@ define(["require", "exports"], function (require, exports) {
             return _this;
         };
         RTResult.prototype.should_return = function () {
-            return [
-                this.error ||
-                    this.func_return_value ||
-                    this.loop_should_continue ||
-                    this.loop_should_break
-            ];
+            if (this.func_return_value) {
+                return true;
+            }
+            if (this.loop_should_continue) {
+                return true;
+            }
+            if (this.loop_should_break) {
+                return true;
+            }
+            if (this.error) {
+                return true;
+            }
+            return false;
         };
         return RTResult;
     }());

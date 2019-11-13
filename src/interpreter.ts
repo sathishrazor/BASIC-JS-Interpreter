@@ -61,7 +61,7 @@ export class Interpreter {
     var var_name = node.var_name_tok.value
     var value = context.symbol_table.get(var_name)
     if (!value)
-      return res.failure(new RTError(
+      throw res.failure(new RTError(
         node.pos_start, node.pos_end,
         `${var_name}' is not defined`,
         context
@@ -120,7 +120,7 @@ export class Interpreter {
     if (!result)
       throw new Error("Error while processing result")
     else
-      return res.success(result.set_pos(node.pos_start, node.pos_end))
+      return res.success(result.set_pos(node.pos_start,node.pos_end));
   }
 
 
@@ -165,7 +165,7 @@ export class Interpreter {
     var res = new RTResult();
     if (node.node_to_return) {
       var value = res.register(_this.visit(node.node_to_return, context))
-      if (res.should_return()) return res
+      return res.success_return(value)
     }
     else {
       value = BNumber.null

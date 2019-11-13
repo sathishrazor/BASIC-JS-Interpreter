@@ -8,8 +8,8 @@ define(["require", "exports"], function (require, exports) {
             this.parent = parent;
         }
         SymbolTable.prototype.get = function (name) {
-            var value = this.symbols.get(name, null);
-            if (value == null && self.parent) {
+            var value = this.symbols[name];
+            if (value == undefined && self.parent) {
                 return this.parent.get(name);
             }
             return value;

@@ -7,8 +7,8 @@ export class SymbolTable {
     }
 
     get(name: any): SymbolTable {
-        var value = this.symbols.get(name, null)
-        if (value == null && self.parent) {
+        var value = this.symbols[name];
+        if (value == undefined && self.parent) {
             return this.parent.get(name)
         }
         return value

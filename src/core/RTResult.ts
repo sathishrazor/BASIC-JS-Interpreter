@@ -2,9 +2,9 @@ import { CodeError } from "../error/code_error";
 import { Value } from "../others/Value";
 
 export class RTResult {
-    value: Value | null | undefined;
-    error: CodeError | null | undefined;
-    func_return_value: null;
+    value: any;
+    error: any;
+    func_return_value: any;
     loop_should_continue: any;
     loop_should_break: any;
     constructor() {
@@ -55,6 +55,7 @@ export class RTResult {
         }
         _this.reset()
         _this.func_return_value = value
+        _this.value = value;
         return _this;
     }
 
@@ -89,12 +90,23 @@ export class RTResult {
     }
 
     should_return() {
-        return [
-            this.error ||
-            this.func_return_value ||
-            this.loop_should_continue ||
-            this.loop_should_break
-        ]
+        if(this.func_return_value)
+        {
+            return true;
+        }
+        if(this.loop_should_continue)
+        {
+            return true;
+        }
+        if(this.loop_should_break)
+        {
+            return true;
+        }
+        if(this.error)
+        {
+            return true ;
+        }      
+        return false;
     }
 
 }
