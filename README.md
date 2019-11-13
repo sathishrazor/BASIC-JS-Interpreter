@@ -1,4 +1,4 @@
-# BASIC_TYPESCRIPT_COMPILER
+# BASIC to Javascript Interpretor
 This is typescript version of Basic PROGRAMMING Language inspired from codepulse work
 you can check his videos from here [CODEPULSE](https://www.youtube.com/channel/UCUVahoidFA7F3Asfvamrm7w)
 [![N|Solid](https://i.ytimg.com/vi/Eythq9848Fg/hqdefault.jpg?sqp=-oaymwEYCKgBEF5IVfKriqkDCwgBFQAAiEIYAXAB&rs=AOn4CLAsC6NspccZcoSv9PgBmtbIdf2ibA)](https://www.youtube.com/watch?v=RriZ4q4z9gU&list=PLZQftyCk7_SdoVexSmwy_tBgs7P0b97yD&index=2)
