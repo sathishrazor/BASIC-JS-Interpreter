@@ -32,7 +32,8 @@ export class Interpreter {
     )
   }
 
-  visit_BStringNode(node: any, context: any) {
+  visit_StringNode(node: any, context: any,_this:any) {
+  
     return new RTResult().success(
       new BString(node.tok.value)
         .set_context(context)
@@ -287,6 +288,48 @@ export class Interpreter {
     if (node.var_name_tok)
       context.symbol_table.set(func_name, func_value)
     return res.success(func_value)
+  }
+
+
+  visit_IfNode(node:any, context:any,self:any)  
+  {
+    if(!self)
+    {
+      self = this;
+    }
+    var res = new RTResult()
+      node.cases.forEach(function(current:any){
+        var condition = current[0];
+        var expr = current[1];
+        var should_return_null = current[2];
+        var condition_value = res.register(self.visit(condition, context))
+        if(res.should_return()){ return res; }
+        if (condition_value.is_true())
+        {
+          var expr_value = res.register(self.visit(expr, context))
+          if (res.should_return()) {return res;}
+          if(should_return_null)
+          {
+            res.success(BNumber.null)
+          }else {
+            res.success(expr_value)
+          }
+        }
+      });
+    if(node.else_case)
+    {
+      var expr = node.else_case[0];
+      var should_return_null = node.else_case[1];
+      var expr_value = res.register(self.visit(expr, context))
+      if (res.should_return()){ return res; }
+      if(should_return_null)
+      {
+        res.success(BNumber.null)
+      }else {
+        res.success(expr_value)
+      }
+    }
+    return res.success(BNumber.null)
   }
 
 }

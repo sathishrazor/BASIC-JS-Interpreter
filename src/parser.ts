@@ -471,7 +471,8 @@ export class Parser {
     var res = new ParseResult()
     var all_cases = res.register(_this.if_expr_cases('IF'), this)
     if (res.error) { return res; }
-    var cases = all_cases, else_case = all_cases
+    var cases = all_cases[0];
+    var else_case = all_cases[1];
     return res.success(new IfNode(cases, else_case))
   }
   if_expr_b(_this?: any) {
@@ -503,7 +504,7 @@ export class Parser {
 
         }
         else {
-          return res.failure(new InvalidSyntaxError(
+          throw res.failure(new InvalidSyntaxError(
             _this.current_tok.pos_start, _this.current_tok.pos_end,
             "Expected 'END'"
           ))
@@ -771,7 +772,7 @@ export class Parser {
     var arg_name_toks: any = []
 
     if (_this.current_tok.type == TT_IDENTIFIER) {
-      arg_name_toks.append(_this.current_tok)
+      arg_name_toks.push(_this.current_tok)
       res.register_advancement()
       _this.advance()
       while (_this.current_tok.type == TT_COMMA) {
@@ -784,7 +785,7 @@ export class Parser {
             "Expected identifier"
           ))
         }
-        arg_name_toks.append(_this.current_tok)
+        arg_name_toks.push(_this.current_tok)
         res.register_advancement()
         _this.advance()
       }

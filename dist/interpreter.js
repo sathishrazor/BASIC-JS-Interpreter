@@ -23,7 +23,7 @@ define(["require", "exports", "./core/RTResult", "./others/number", "./others/st
                 .set_context(context)
                 .set_pos(node.pos_start, node.pos_end));
         };
-        Interpreter.prototype.visit_BStringNode = function (node, context) {
+        Interpreter.prototype.visit_StringNode = function (node, context, _this) {
             return new RTResult_1.RTResult().success(new string_1.BString(node.tok.value)
                 .set_context(context)
                 .set_pos(node.pos_start, node.pos_end));
@@ -261,6 +261,48 @@ define(["require", "exports", "./core/RTResult", "./others/number", "./others/st
             if (node.var_name_tok)
                 context.symbol_table.set(func_name, func_value);
             return res.success(func_value);
+        };
+        Interpreter.prototype.visit_IfNode = function (node, context, self) {
+            if (!self) {
+                self = this;
+            }
+            var res = new RTResult_1.RTResult();
+            node.cases.forEach(function (current) {
+                var condition = current[0];
+                var expr = current[1];
+                var should_return_null = current[2];
+                var condition_value = res.register(self.visit(condition, context));
+                if (res.should_return()) {
+                    return res;
+                }
+                if (condition_value.is_true()) {
+                    var expr_value = res.register(self.visit(expr, context));
+                    if (res.should_return()) {
+                        return res;
+                    }
+                    if (should_return_null) {
+                        res.success(number_1.BNumber.null);
+                    }
+                    else {
+                        res.success(expr_value);
+                    }
+                }
+            });
+            if (node.else_case) {
+                var expr = node.else_case[0];
+                var should_return_null = node.else_case[1];
+                var expr_value = res.register(self.visit(expr, context));
+                if (res.should_return()) {
+                    return res;
+                }
+                if (should_return_null) {
+                    res.success(number_1.BNumber.null);
+                }
+                else {
+                    res.success(expr_value);
+                }
+            }
+            return res.success(number_1.BNumber.null);
         };
         return Interpreter;
     }());

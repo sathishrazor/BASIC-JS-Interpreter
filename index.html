@@ -23,8 +23,15 @@
                     Run
                 </button>
             </div>
-        </div>
+            <br>
+            <br>
+            
+            <div class="col">
+                <pre id="output">
 
+                </pre>
+            </div>
+        </div>
     </div>
 
 
@@ -38,7 +45,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
    <script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
     <script>
-        var compiler= null;
+        var compiler= null;        
         require(["./dist/basic"],function(r){
            compiler = new r.basic();
         })
@@ -47,8 +54,8 @@
             var src_code = $("#code_editor").val();
             console.log(src_code);
             var res = compiler.run("'<stdin>'",src_code);
+                $("#output").html(JSON.stringify(res.value.elements,null,1));
         }
-    
     </script>
 
 </body>

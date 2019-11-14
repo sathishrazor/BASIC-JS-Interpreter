@@ -362,7 +362,8 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
             if (res.error) {
                 return res;
             }
-            var cases = all_cases, else_case = all_cases;
+            var cases = all_cases[0];
+            var else_case = all_cases[1];
             return res.success(new if_node_1.IfNode(cases, else_case));
         };
         Parser.prototype.if_expr_b = function (_this) {
@@ -393,7 +394,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
                         _this.advance();
                     }
                     else {
-                        return res.failure(new invalid_syntax_error_1.InvalidSyntaxError(_this.current_tok.pos_start, _this.current_tok.pos_end, "Expected 'END'"));
+                        throw res.failure(new invalid_syntax_error_1.InvalidSyntaxError(_this.current_tok.pos_start, _this.current_tok.pos_end, "Expected 'END'"));
                     }
                 }
                 else {
@@ -626,7 +627,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
             _this.advance();
             var arg_name_toks = [];
             if (_this.current_tok.type == TT_IDENTIFIER) {
-                arg_name_toks.append(_this.current_tok);
+                arg_name_toks.push(_this.current_tok);
                 res.register_advancement();
                 _this.advance();
                 while (_this.current_tok.type == TT_COMMA) {
@@ -635,7 +636,7 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
                     if (_this.current_tok.type != TT_IDENTIFIER) {
                         throw res.failure(new invalid_syntax_error_1.InvalidSyntaxError(_this.current_tok.pos_start, _this.current_tok.pos_end, "Expected identifier"));
                     }
-                    arg_name_toks.append(_this.current_tok);
+                    arg_name_toks.push(_this.current_tok);
                     res.register_advancement();
                     _this.advance();
                 }

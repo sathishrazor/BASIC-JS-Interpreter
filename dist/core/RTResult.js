@@ -76,7 +76,7 @@ define(["require", "exports"], function (require, exports) {
             if (this.loop_should_break) {
                 return true;
             }
-            if (this.error) {
+            if (this.error || this.error == null) {
                 return true;
             }
             return false;

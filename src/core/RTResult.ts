@@ -102,7 +102,7 @@ export class RTResult {
         {
             return true;
         }
-        if(this.error)
+        if(this.error || this.error == null)
         {
             return true ;
         }      
