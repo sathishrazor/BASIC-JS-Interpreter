@@ -529,8 +529,8 @@ export class Parser {
     if (_this.current_tok.matches(TT_KEYWORD, 'ELIF')) {
       var all_cases = res.register(_this.if_expr_b(this), this)
       if (res.error) { return res; }
-      cases = all_cases;
-      else_case = all_cases;
+      cases = all_cases[0];
+      else_case = all_cases[1];
     }
     else {
       else_case = res.register(_this.if_expr_c(this), this)
@@ -582,8 +582,8 @@ export class Parser {
       else {
         all_cases = res.register(_this.if_expr_b_or_c(this), this)
         if (res.error) { return res }
-        new_cases = all_cases;
-        else_case = all_cases;
+        new_cases = all_cases[0];
+        else_case = all_cases[1];
         cases.concat(new_cases)
       }
     }
@@ -593,8 +593,8 @@ export class Parser {
       cases.push([condition, expr, false])
       var all_cases: any[] = res.register(_this.if_expr_b_or_c(this), this)
       if (res.error) { return res; }
-      var new_cases = all_cases;
-      else_case = all_cases
+      var new_cases = all_cases[0];
+      else_case = all_cases[1]
       cases.concat(new_cases)
     }
     return res.success([cases, else_case])

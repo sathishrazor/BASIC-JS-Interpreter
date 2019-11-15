@@ -90,23 +90,28 @@ export class RTResult {
     }
 
     should_return() {
+        
         if(this.func_return_value)
         {
             return true;
         }
+        
         if(this.loop_should_continue)
         {
             return true;
         }
+        
         if(this.loop_should_break)
         {
             return true;
         }
-        if(this.error || this.error == null)
+
+        if(this.error)
         {
             return true ;
         }      
         return false;
+    
     }
 
 }

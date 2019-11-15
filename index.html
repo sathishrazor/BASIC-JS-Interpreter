@@ -54,7 +54,8 @@
             var src_code = $("#code_editor").val();
             console.log(src_code);
             var res = compiler.run("'<stdin>'",src_code);
-                $("#output").html(JSON.stringify(res.value.elements,null,1));
+              //  $("#output").html(JSON.stringify(res.value.elements,null,1));
+                console.table(res.value.elements);
         }
     </script>
 

@@ -419,8 +419,8 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
                 if (res.error) {
                     return res;
                 }
-                cases = all_cases;
-                else_case = all_cases;
+                cases = all_cases[0];
+                else_case = all_cases[1];
             }
             else {
                 else_case = res.register(_this.if_expr_c(this), this);
@@ -468,8 +468,8 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
                     if (res.error) {
                         return res;
                     }
-                    new_cases = all_cases;
-                    else_case = all_cases;
+                    new_cases = all_cases[0];
+                    else_case = all_cases[1];
                     cases.concat(new_cases);
                 }
             }
@@ -483,8 +483,8 @@ define(["require", "exports", "./error/invalid_syntax_error", "./nodes/call_node
                 if (res.error) {
                     return res;
                 }
-                var new_cases = all_cases;
-                else_case = all_cases;
+                var new_cases = all_cases[0];
+                else_case = all_cases[1];
                 cases.concat(new_cases);
             }
             return res.success([cases, else_case]);

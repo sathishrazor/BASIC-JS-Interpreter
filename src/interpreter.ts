@@ -298,6 +298,7 @@ export class Interpreter {
       self = this;
     }
     var res = new RTResult()
+  
       node.cases.forEach(function(current:any){
         var condition = current[0];
         var expr = current[1];
@@ -306,6 +307,7 @@ export class Interpreter {
         if(res.should_return()){ return res; }
         if (condition_value.is_true())
         {
+          node.else_case = undefined;
           var expr_value = res.register(self.visit(expr, context))
           if (res.should_return()) {return res;}
           if(should_return_null)
@@ -316,17 +318,25 @@ export class Interpreter {
           }
         }
       });
+
+      if(node.else_case == undefined)
+      {
+        return res;
+      }
+
     if(node.else_case)
     {
       var expr = node.else_case[0];
       var should_return_null = node.else_case[1];
       var expr_value = res.register(self.visit(expr, context))
-      if (res.should_return()){ return res; }
+      if (res.should_return()){ 
+        return res; 
+      }
       if(should_return_null)
       {
-        res.success(BNumber.null)
+       return  res.success(BNumber.null)
       }else {
-        res.success(expr_value)
+       return  res.success(expr_value)
       }
     }
     return res.success(BNumber.null)

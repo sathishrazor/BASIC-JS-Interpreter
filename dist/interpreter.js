@@ -276,6 +276,7 @@ define(["require", "exports", "./core/RTResult", "./others/number", "./others/st
                     return res;
                 }
                 if (condition_value.is_true()) {
+                    node.else_case = undefined;
                     var expr_value = res.register(self.visit(expr, context));
                     if (res.should_return()) {
                         return res;
@@ -288,6 +289,9 @@ define(["require", "exports", "./core/RTResult", "./others/number", "./others/st
                     }
                 }
             });
+            if (node.else_case == undefined) {
+                return res;
+            }
             if (node.else_case) {
                 var expr = node.else_case[0];
                 var should_return_null = node.else_case[1];
@@ -296,10 +300,10 @@ define(["require", "exports", "./core/RTResult", "./others/number", "./others/st
                     return res;
                 }
                 if (should_return_null) {
-                    res.success(number_1.BNumber.null);
+                    return res.success(number_1.BNumber.null);
                 }
                 else {
-                    res.success(expr_value);
+                    return res.success(expr_value);
                 }
             }
             return res.success(number_1.BNumber.null);
