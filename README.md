@@ -1,37 +1,94 @@
-# BASIC to Javascript Interpretor
-This is typescript version of Basic PROGRAMMING Language inspired from codepulse work
-you can check his videos from here [CODEPULSE](https://www.youtube.com/channel/UCUVahoidFA7F3Asfvamrm7w)
-[![N|Solid](https://i.ytimg.com/vi/Eythq9848Fg/hqdefault.jpg?sqp=-oaymwEYCKgBEF5IVfKriqkDCwgBFQAAiEIYAXAB&rs=AOn4CLAsC6NspccZcoSv9PgBmtbIdf2ibA)](https://www.youtube.com/watch?v=RriZ4q4z9gU&list=PLZQftyCk7_SdoVexSmwy_tBgs7P0b97yD&index=2)
-
-### Todos
- - Fix the bugs in parser
-
-#  Features!
+# BASIC-JS-Interpretor
+BASIC-JS-Interpretor is a Basic to Javascript Interpretor can be used in FORMULA parsing.
   - Written in Typescript
-  - Amd module support
+  - Runs on Netsuite's Rhino
+  - Amd Module support
+  - Supports MultiLine Script Parsing
+  - Supports Function
+  - Supports Loop statements
+  - Advanced syntax validator
+
+# New Features!
+
+  - Netusite Suitescript 2.0 Import support added
+  - greater than less than syntax error has been fixed
+  - Runs on Netsuite's Rhino Chrome Firefox
+
+
+### Tech
+
+Basic-JS uses a number of open source projects to work properly:
+
+* [Typescript](https://www.typescriptlang.org/) - A Superset of javascript
+* [VisualStudio Code](https://code.visualstudio.com/) - awesome windows-based text editor and light ide
+* [Twitter Bootstrap](https://getbootstrap.com/) - great UI boilerplate for example web apps
+*  [jQuery] - Used in examples
 
 ### Installation
 
-This example requires [r.js](https://nodejs.org/)  to run.
+Basic-Js requires [Rhino](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino) to run.
 
-Install the typescript and R js and start the server.
-
+[Netsuite]
+Copy the dist scripts to FileCabinet
+and in Scripts
 ```sh
-$ npm install -g typescript
-$ cd BASIC_COMPILER
-$ tsc
+require(["./basic"],function(interpretor){
+  var basic = new interpretor.basic();
+  var result = basic.run("test","2+3");
+  log.debug("output",result.value.elements);
+})
+```
+[Browser]
+Reference [Require](https://requirejs.org/) for loading the modules.
+Copy the dist scripts to root directory of the application 
+and in html file
+```sh
+require(["./basic"],function(interpretor){
+  var basic = new interpretor.basic();
+  var result = basic.run("test","2+3");
+  console.log("output",result.value.elements);
+})
 ```
 
+### Plugins
 
+Dillinger is currently extended with the following plugins. Instructions on how to use them in your own application are linked below.
+
+| Plugin | README |
+| ------ | ------ |
+| Dropbox | [plugins/dropbox/README.md][PlDb] |
+| GitHub | [plugins/github/README.md][PlGh] |
+| Google Drive | [plugins/googledrive/README.md][PlGd] |
+| OneDrive | [plugins/onedrive/README.md][PlOd] |
+| Medium | [plugins/medium/README.md][PlMe] |
+| Google Analytics | [plugins/googleanalytics/README.md][PlGa] |
 
 
 ### Development
+
 Want to contribute? Great!
+Basic-js uses Typescript and VisualStudio Code for fast developing.
 
-Basic uses Visual studio code for fast developing.
-Make a change in your file and instantanously see your updates!
+Open your favorite Terminal and run these commands.
+
+#### Building for source
+For production release please change the tsconfig file according to your need:
+```sh
+tsc
+```
 
 
+### Todos
 
+ - Write Tests
+ - Add comments
 
+License
+----
+
+MIT
+
+### Credits
+This is typescript version of Basic PROGRAMMING Language inspired from codepulse work
+you can check his videos from here [CODEPULSE](https://www.youtube.com/channel/UCUVahoidFA7F3Asfvamrm7w)
 
