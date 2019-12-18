@@ -1,4 +1,4 @@
-# BASIC-JS-Interpretor
+# BASIC-JS-Interpreter
 BASIC-JS-Interpretor is a Basic to Javascript Interpretor can be used in FORMULA parsing.
   - Written in Typescript
   - Runs on Netsuite's Rhino
@@ -33,7 +33,7 @@ Copy the dist scripts to FileCabinet
 and in Scripts
 ```sh
 require(["./basic"],function(interpretor){
-  var basic = new interpretor.basic();
+  var basic = new interpreter.basic();
   var result = basic.run("test","2+3");
   log.debug("output",result.value.elements);
 })
@@ -43,8 +43,8 @@ Reference [Require](https://requirejs.org/) for loading the modules.
 Copy the dist scripts to root directory of the application 
 and in html file
 ```sh
-require(["./basic"],function(interpretor){
-  var basic = new interpretor.basic();
+require(["./basic"],function(interpreter){
+  var basic = new interpreter.basic();
   var result = basic.run("test","2+3");
   console.log("output",result.value.elements);
 })
