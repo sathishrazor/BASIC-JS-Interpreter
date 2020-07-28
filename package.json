@@ -2,7 +2,8 @@
   "name": "basic-js-interpreter",
   "version": "1.0.0",
   "description": "BASIC Interpreter for JavaScript",
-  "main": "dist/basic.js",
+  "main": "src/basic.ts",
+  "bin": "dist/basic.js",
   "directories": {
     "example": "examples"
   },
@@ -21,6 +22,5 @@
   "bugs": {
     "url": "https://github.com/sathishrazor/BASIC-JS-Interpreter/issues"
   },
-  "homepage": "https://github.com/sathishrazor/BASIC-JS-Interpreter#readme",
-  "publishConfig": { "registry": "https://npm.pkg.github.com/" }
+  "homepage": "https://github.com/sathishrazor/BASIC-JS-Interpreter#readme"
 }
