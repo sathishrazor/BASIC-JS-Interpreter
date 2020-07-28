@@ -21,8 +21,7 @@ Basic-JS uses a number of open source projects to work properly:
 
 * [Typescript](https://www.typescriptlang.org/) - A Superset of javascript
 * [VisualStudio Code](https://code.visualstudio.com/) - awesome windows-based text editor and light ide
-* [Twitter Bootstrap](https://getbootstrap.com/) - great UI boilerplate for example web apps
-*  [jQuery] - Used in examples
+
 
 ### Installation
 
@@ -50,24 +49,79 @@ require(["./basic"],function(interpreter){
 })
 ```
 
-### Plugins
+## Language Grammer
+```
+statements  : NEWLINE* statement (NEWLINE+ statement)* NEWLINE*
 
-Dillinger is currently extended with the following plugins. Instructions on how to use them in your own application are linked below.
+statement		: KEYWORD:RETURN expr?
+						: KEYWORD:CONTINUE
+						: KEYWORD:BREAK
+						: expr
 
-| Plugin | README |
-| ------ | ------ |
-| Dropbox | [plugins/dropbox/README.md][PlDb] |
-| GitHub | [plugins/github/README.md][PlGh] |
-| Google Drive | [plugins/googledrive/README.md][PlGd] |
-| OneDrive | [plugins/onedrive/README.md][PlOd] |
-| Medium | [plugins/medium/README.md][PlMe] |
-| Google Analytics | [plugins/googleanalytics/README.md][PlGa] |
+expr        : KEYWORD:VAR IDENTIFIER EQ expr
+            : comp-expr ((KEYWORD:AND|KEYWORD:OR) comp-expr)*
 
+comp-expr   : NOT comp-expr
+            : arith-expr ((EE|LT|GT|LTE|GTE) arith-expr)*
+
+arith-expr  :	term ((PLUS|MINUS) term)*
+
+term        : factor ((MUL|DIV) factor)*
+
+factor      : (PLUS|MINUS) factor
+            : power
+
+power       : call (POW factor)*
+
+call        : atom (LPAREN (expr (COMMA expr)*)? RPAREN)?
+
+atom        : INT|FLOAT|STRING|IDENTIFIER
+            : LPAREN expr RPAREN
+            : list-expr
+            : if-expr
+            : for-expr
+            : while-expr
+            : func-def
+
+list-expr   : LSQUARE (expr (COMMA expr)*)? RSQUARE
+
+if-expr     : KEYWORD:IF expr KEYWORD:THEN
+              (statement if-expr-b|if-expr-c?)
+            | (NEWLINE statements KEYWORD:END|if-expr-b|if-expr-c)
+
+if-expr-b   : KEYWORD:ELIF expr KEYWORD:THEN
+              (statement if-expr-b|if-expr-c?)
+            | (NEWLINE statements KEYWORD:END|if-expr-b|if-expr-c)
+
+if-expr-c   : KEYWORD:ELSE
+              statement
+            | (NEWLINE statements KEYWORD:END)
+
+for-expr    : KEYWORD:FOR IDENTIFIER EQ expr KEYWORD:TO expr 
+              (KEYWORD:STEP expr)? KEYWORD:THEN
+              statement
+            | (NEWLINE statements KEYWORD:END)
+
+while-expr  : KEYWORD:WHILE expr KEYWORD:THEN
+              statement
+            | (NEWLINE statements KEYWORD:END)
+
+func-def    : KEYWORD:FUN IDENTIFIER?
+              LPAREN (IDENTIFIER (COMMA IDENTIFIER)*)? RPAREN
+              (ARROW expr)
+            | (NEWLINE statements KEYWORD:END)
+
+```
 
 ### Development
 
 Want to contribute? Great!
 Basic-js uses Typescript and VisualStudio Code for fast developing.
+
+Want to Know more? 
+Great I suggest you the following books and references to know more about compilers and interpreters
+  - Principles Of Compiler Design
+  - TypeScript Design Patterns
 
 Open your favorite Terminal and run these commands.
 
@@ -90,5 +144,8 @@ MIT
 
 ### Credits
 This is typescript version of Basic PROGRAMMING Language inspired from codepulse work
-you can check his videos from here [CODEPULSE](https://www.youtube.com/channel/UCUVahoidFA7F3Asfvamrm7w)
+
+- Principles Of Compiler Design
+   - ISBN-13: 978-8185015613
+
 
